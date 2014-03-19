@@ -33,3 +33,5 @@ services:
     class: Cron\TimeIntervalJob('foo', '1 hour', @fooJobDecorator)
     tags: [cronJob]
 ```
+
+To select & execute tasks run Cron\Cron::run() method.
