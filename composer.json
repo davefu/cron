@@ -10,7 +10,7 @@
 	}
 	],
 	"require": {
-		"nette/nette": "@dev",
+		"nette/nette": "@dev"
 	},
 	"autoload": {
 		"psr-0": {
