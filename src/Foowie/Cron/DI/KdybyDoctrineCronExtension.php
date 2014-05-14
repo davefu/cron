@@ -11,7 +11,7 @@ class KdybyDoctrineCronExtension extends CronExtension implements IEntityProvide
 
 	public function getEntityMappings() {
 		return array(
-			'JobInfo' => (object)array('value' => 'xml', 'attributes' => __DIR__ . '/../metadata'),
+			'Foowie\Cron' => (object)array('value' => 'xml', 'attributes' => __DIR__ . '/../metadata'),
 		);
 	}
 } 
