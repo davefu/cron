@@ -6,6 +6,8 @@ use Nette\Configurator;
 use Nette\DI\Compiler;
 use Nette\DI\CompilerExtension;
 use Nette\Utils\AssertionException;
+use Nette\Utils\Validators;
+use Tester\Assert;
 
 /**
  * @author Daniel Robenek <daniel.robenek@me.com>
@@ -19,6 +21,16 @@ class CronExtension extends CompilerExtension {
 		'cronJobTag' => 'cronJob',
 		'repositoryType' => null, // null = autodetect, false = none
 		'table' => 'cron', // ndb only
+
+		'mapPresenter' => true,
+		'securityToken' => false,
+		'mapping' => array(
+			'FoowieCron' => 'Foowie\\Cron\\Application\\UI\\*\\*Presenter'
+		),
+		'router' => array(
+			'pattern' => 'cron[/<token>]',
+			'metadata' => 'FoowieCron:Cron:default',
+		),
 	);
 
 	public function loadConfiguration() {
@@ -35,12 +47,35 @@ class CronExtension extends CompilerExtension {
 			->setClass('Foowie\Cron\ICron')
 			->setFactory(array($factory, 'create'));
 
+		if($config['mapPresenter']) {
+			$this->loadMapping();
+		}
+
 		$this->loadRepository();
+	}
+
+	protected function loadMapping() {
+		$builder = $this->getContainerBuilder();
+		$config = $this->getConfig($this->defaults);
+
+		if($config['securityToken'] === false) {
+			throw new AssertionException('Specify security token [' . $this->name . '.securityToken] please.');
+		}
+		$builder->addDefinition($this->prefix('securityToken'))
+			->setClass('Foowie\Cron\Application\UI\SecurityToken', array($config['securityToken']));
+		$builder->addDefinition($this->prefix('router'))
+			->setClass('Foowie\Cron\Application\Routers\Route', array($config['router']['pattern'], $config['router']['metadata']))
+			->setAutowired(false);
+		$builder->getDefinition('router')
+			->addSetup('Foowie\Cron\Application\Routers\Route::prependToRouteList($service, ?)', array($this->prefix('@router')));
+		$builder->getDefinition('nette.presenterFactory')
+			->addSetup('setMapping', array($config['mapping']));
 	}
 
 	protected function loadRepository() {
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig($this->defaults);
+
 		$repositoryType = $config['repositoryType'] === null ? $this->detectRepositoryType() : $config['repositoryType'];
 		switch ($repositoryType) {
 			case static::REPOSITORY_DOCTRINE:

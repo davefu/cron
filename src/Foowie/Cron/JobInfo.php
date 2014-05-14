@@ -36,7 +36,6 @@ class JobInfo extends Object {
 		$this->data = $data;
 	}
 
-
 	/**
 	 * @return int
 	 */
