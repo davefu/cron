@@ -1,5 +1,5 @@
 {
-	"name": "Foowie/Cron",
+	"name": "foowie/cron",
 	"type": "library",
 	"description": "Cron",
 	"keywords": ["nette", "cron"],
