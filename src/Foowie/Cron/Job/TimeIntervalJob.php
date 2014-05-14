@@ -1,7 +1,8 @@
 <?php
 
-namespace Cron;
+namespace Foowie\Cron\Job;
 
+use Foowie\Cron\Repository\IRepository;
 use Nette\Object;
 use DateTime;
 
@@ -23,8 +24,8 @@ class TimeIntervalJob extends Object implements IJob {
 	protected $repository;
 
 	/**
-	 * @param $name Unique name of cron job
-	 * @param $interval Inteval of cron job in format strtotime @see http://cz1.php.net/manual/en/function.strtotime.php
+	 * @param string $name Unique name of cron job
+	 * @param string $interval Interval of cron job in format strtotime @see http://cz1.php.net/manual/en/function.strtotime.php
 	 * @param IJob $job Job to call
 	 * @param IRepository $repository
 	 */

@@ -1,10 +1,10 @@
 <?php
 
-namespace Cron;
+namespace Foowie\Cron\Job;
 
-use Nette\Object;
 use DateTime;
-use DateInterval;
+use Foowie\Cron\Repository\IRepository;
+use Nette\Object;
 
 /**
  * @author Daniel Robenek <daniel.robenek@me.com>
@@ -29,10 +29,10 @@ class MidnightJob extends Object implements IJob {
 	public function run() {
 		$record = $this->repository->find($this->name);
 
-		$yesterdaysMidnight = DateTime::createFromFormat('Y-m-d', date('Y-m-d'))->sub(new DateInterval('P1D'));
+		$yesterdaysMidnight = new DateTime('midnight - 1 DAY');
 		if ($record->lastRun !== null) {
-			$lastRunMidnight = DateTime::createFromFormat('Y-m-d', $record->lastRun->format('Y-m-d'));
-			if ($lastRunMidnight->format('U') > $yesterdaysMidnight->format('U')) {
+			$lastRunMidnight = new DateTime($record->lastRun->format('Y-m-d'));
+			if ($lastRunMidnight > $yesterdaysMidnight) {
 				return false;
 			}
 		}

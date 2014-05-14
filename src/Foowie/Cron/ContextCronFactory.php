@@ -1,7 +1,8 @@
 <?php
 
-namespace Cron;
+namespace Foowie\Cron;
 
+use Foowie\Cron\Job\IJob;
 use Nette\Object;
 use Nette\DI\Container;
 

@@ -10,11 +10,20 @@
 	}
 	],
 	"require": {
-		"nette/nette": "@dev"
+		"nette/nette": "~2.2"
+	},
+	"require-dev": {
+		"nette/tester": "@dev",
+		"doctrine/orm": "2.*",
+		"kdyby/doctrine": "1.*"
+	},
+	"suggest": {
+		"doctrine/orm": "ORM framework",
+		"kdyby/doctrine": "Nette extension for Doctrine 2"
 	},
 	"autoload": {
 		"psr-0": {
-			"Cron": "src/"
+			"Foowie\\Cron": "src/"
 		}
 	}	
 }

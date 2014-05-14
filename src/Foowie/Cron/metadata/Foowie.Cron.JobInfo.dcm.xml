@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Foowie\Cron\Repository\JobInfo" table="cron">
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="name" type="string" column="name" length="32" precision="0" scale="0" nullable="false"/>
+    <field name="lastRun" type="datetime" column="lastRun" length="0" precision="0" scale="0" nullable="true"/>
+    <field name="data" type="string" column="data" length="1024" precision="0" scale="0" nullable="true"/>
+  </entity>
+</doctrine-mapping>

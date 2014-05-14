@@ -1,6 +1,7 @@
 <?php
 
-namespace Cron;
+namespace Foowie\Cron\Repository;
+use Foowie\Cron\JobInfo;
 
 /**
  * @author Daniel Robenek <daniel.robenek@me.com>
@@ -9,7 +10,7 @@ interface IRepository {
 
 	/**
 	 * @param string $name
-	 * @return \Nette\Database\Table\ActiveRow
+	 * @return JobInfo
 	 */
 	function find($name);
 
@@ -17,6 +18,6 @@ interface IRepository {
 	 * @param string $name
 	 * @param \DateTime $time
 	 */
-	function updateTime($name, $time);
+	function updateTime($name, \DateTime $time);
 
 }
