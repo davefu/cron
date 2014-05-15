@@ -2,3 +2,4 @@ services:
 	- FoowieTests\Mocks\NetteDatabaseContextMock
 	- FoowieTests\Mocks\EntityManagerInterfaceMock
 cron:
+	securityToken: null

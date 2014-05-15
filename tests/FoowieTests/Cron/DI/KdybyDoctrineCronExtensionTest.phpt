@@ -30,8 +30,8 @@ class KdybyDoctrineCronExtensionTest extends TestCase {
 	public function testHasEntityDefinition() {
 		$mappings = $this->extension->getEntityMappings();
 		Assert::type('array', $mappings);
-		Assert::true(isset($mappings['JobInfo']));
-		Assert::type('object', $mappings['JobInfo']);
+		Assert::true(isset($mappings['Foowie\Cron']));
+		Assert::type('object', $mappings['Foowie\Cron']);
 	}
 
 }
