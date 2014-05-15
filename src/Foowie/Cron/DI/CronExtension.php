@@ -47,6 +47,9 @@ class CronExtension extends CompilerExtension {
 			->setClass('Foowie\Cron\ICron')
 			->setFactory(array($factory, 'create'));
 
+		$builder->addDefinition($this->prefix('dateTimeProvider'))
+			->setClass('Foowie\Cron\DateTime\SystemDateTimeProvider');
+
 		if($config['mapPresenter']) {
 			$this->loadMapping();
 		}
