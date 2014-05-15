@@ -32,7 +32,7 @@ class Doctrine2Repository extends Object implements IRepository {
 			$jobInfo = new JobInfo();
 			$jobInfo->setName($name);
 			$this->em->persist($jobInfo);
-			$this->em->flush();
+			$this->em->flush($jobInfo);
 		}
 
 		return $jobInfo;
@@ -49,6 +49,7 @@ class Doctrine2Repository extends Object implements IRepository {
 			throw new CronException('Cron job record named [' . $name . '] not found!');
 		}
 		$jobInfo->setLastRun($time);
+		$this->em->flush($jobInfo);
 	}
 
 }
