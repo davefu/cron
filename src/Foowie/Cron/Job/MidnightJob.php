@@ -3,6 +3,7 @@
 namespace Foowie\Cron\Job;
 
 use DateTime;
+use Foowie\Cron\DateTime\IDateTimeProvider;
 use Foowie\Cron\Repository\IRepository;
 use Nette\Object;
 
@@ -20,19 +21,23 @@ class MidnightJob extends Object implements IJob {
 	/** @var IRepository */
 	protected $repository;
 
-	function __construct($name, IJob $job, IRepository $repository) {
+	/** @var IDateTimeProvider */
+	protected $dateTimeProvider;
+
+	function __construct($name, IJob $job, IRepository $repository, IDateTimeProvider $dateTimeProvider) {
 		$this->name = $name;
 		$this->job = $job;
 		$this->repository = $repository;
+		$this->dateTimeProvider = $dateTimeProvider;
 	}
 
 	public function run() {
 		$record = $this->repository->find($this->name);
 
-		$yesterdaysMidnight = new DateTime('midnight - 1 DAY');
-		if ($record->lastRun !== null) {
-			$lastRunMidnight = new DateTime($record->lastRun->format('Y-m-d'));
-			if ($lastRunMidnight > $yesterdaysMidnight) {
+		if ($record->getLastRun() !== null) {
+			$midnight = $this->dateTimeProvider->getTime('midnight');
+			$midnightOfLastRun = $this->dateTimeProvider->getTime($record->getLastRun()->format('Y-m-d'));
+			if($midnight == $midnightOfLastRun) {
 				return false;
 			}
 		}
