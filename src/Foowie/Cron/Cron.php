@@ -8,10 +8,6 @@ use Nette\Object;
 use Exception;
 use Tracy\Debugger;
 
-if (!class_exists('Tracy\Debugger')) {
-	class_alias('Nette\Diagnostics\Debugger', 'Tracy\Debugger');
-}
-
 /**
  * @author Daniel Robenek <daniel.robenek@me.com>
  */

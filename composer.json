@@ -10,12 +10,14 @@
 	}
 	],
 	"require": {
-		"nette/nette": "~2.2"
+		"nette/utils": "2.*",
+		"nette/application": "2.*",
+		"tracy/tracy": "2.*"
 	},
 	"require-dev": {
 		"nette/tester": "@dev",
 		"doctrine/orm": "2.*",
-		"kdyby/doctrine": "1.*"
+		"kdyby/doctrine": "2.*"
 	},
 	"suggest": {
 		"doctrine/orm": "ORM framework",

@@ -7,7 +7,7 @@ dir=$(cd `dirname $0` && pwd)
 runnerScript="$dir/../vendor/nette/tester/Tester/tester.php"
 if [ ! -f "$runnerScript" ]; then
 	echo "Nette Tester is missing. You can install it using Composer:" >&2
-	echo "php composer.phar update --dev." >&2
+	echo "php composer.phar update." >&2
 	exit 2
 fi
 
