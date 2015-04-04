@@ -5,9 +5,9 @@ namespace Foowie\Cron\DI;
 use Nette\Configurator;
 use Nette\DI\Compiler;
 use Nette\DI\CompilerExtension;
+use Nette\DI\Statement;
 use Nette\Utils\AssertionException;
-use Nette\Utils\Validators;
-use Tester\Assert;
+use Nette\Utils\Json;
 
 /**
  * @author Daniel Robenek <daniel.robenek@me.com>
@@ -23,6 +23,7 @@ class CronExtension extends CompilerExtension {
 		'table' => 'cron', // ndb only
 
 		'mapPresenter' => true,
+		'maxExecutionTime' => null,
 		'securityToken' => false,
 		'mapping' => array(
 			'FoowieCron' => 'Foowie\\Cron\\Application\\UI\\*\\*Presenter'
@@ -31,6 +32,7 @@ class CronExtension extends CompilerExtension {
 			'pattern' => 'cron[/<token>]',
 			'metadata' => 'FoowieCron:Cron:default',
 		),
+		'jobs' => array(),
 	);
 
 	public function loadConfiguration() {
@@ -50,18 +52,20 @@ class CronExtension extends CompilerExtension {
 		$builder->addDefinition($this->prefix('dateTimeProvider'))
 			->setClass('Foowie\Cron\DateTime\SystemDateTimeProvider');
 
-		if($config['mapPresenter']) {
+		if ($config['mapPresenter']) {
 			$this->loadMapping();
 		}
 
 		$this->loadRepository();
+
+		$this->loadJobs();
 	}
 
 	protected function loadMapping() {
 		$builder = $this->getContainerBuilder();
 		$config = $this->getConfig($this->defaults);
 
-		if($config['securityToken'] === false) {
+		if ($config['securityToken'] === false) {
 			throw new AssertionException('Specify security token [' . $this->name . '.securityToken] please.');
 		}
 		$builder->addDefinition($this->prefix('securityToken'))
@@ -73,6 +77,9 @@ class CronExtension extends CompilerExtension {
 			->addSetup('Foowie\Cron\Application\Routers\Route::prependToRouteList($service, ?)', array($this->prefix('@router')));
 		$builder->getDefinition('nette.presenterFactory')
 			->addSetup('setMapping', array($config['mapping']));
+		$builder->addDefinition($this->prefix('cronPresenter'))
+			->setClass('Foowie\Cron\Application\UI\CronPresenter')
+			->addSetup('setMaxExecutionTime', [$config['maxExecutionTime']]);
 	}
 
 	protected function loadRepository() {
@@ -94,6 +101,26 @@ class CronExtension extends CompilerExtension {
 				break;
 			default:
 				throw new AssertionException("Invalid repository type [$repositoryType]!");
+		}
+	}
+
+	protected function loadJobs() {
+		$builder = $this->getContainerBuilder();
+		$config = $this->getConfig($this->defaults);
+
+		foreach ($config['jobs'] as $subscriber) {
+			$def = $builder->addDefinition($this->prefix('job.' . md5(Json::encode($subscriber))));
+			list($def->factory) = Compiler::filterArguments(array(
+				is_string($subscriber) ? new Statement($subscriber) : $subscriber
+			));
+
+			list($subscriberClass) = (array)$builder->normalizeEntity($def->factory->entity);
+			if (class_exists($subscriberClass)) {
+				$def->class = $subscriberClass;
+			}
+
+			$def->setAutowired(false);
+			$def->addTag($config['cronJobTag']);
 		}
 	}
 
