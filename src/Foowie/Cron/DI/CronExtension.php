@@ -6,6 +6,8 @@ use Nette\Configurator;
 use Nette\DI\Compiler;
 use Nette\DI\CompilerExtension;
 use Nette\DI\Statement;
+use Nette\PhpGenerator\ClassType;
+use Nette\PhpGenerator\Helpers;
 use Nette\Utils\AssertionException;
 use Nette\Utils\Json;
 
@@ -33,6 +35,7 @@ class CronExtension extends CompilerExtension {
 			'metadata' => 'FoowieCron:Cron:default',
 		),
 		'jobs' => array(),
+		'panel' => true,
 	);
 
 	public function loadConfiguration() {
@@ -59,6 +62,20 @@ class CronExtension extends CompilerExtension {
 		$this->loadRepository();
 
 		$this->loadJobs();
+
+	}
+
+	public function afterCompile(ClassType $class) {
+		$container = $this->getContainerBuilder();
+		$config = $this->getConfig($this->defaults);
+		if ($config['panel'] && $container->parameters['debugMode']) {
+			$init = $class->methods['initialize'];
+			$init->addBody(Helpers::format(
+				'Foowie\Cron\Diagnostics\Panel::register($this->getByType(?), $this->getByType(?));',
+				'Foowie\Cron\ICron',
+				'Nette\Http\Request'
+			));
+		}
 	}
 
 	protected function loadMapping() {
