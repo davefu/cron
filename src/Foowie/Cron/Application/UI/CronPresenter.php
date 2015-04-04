@@ -2,6 +2,7 @@
 
 namespace Foowie\Cron\Application\UI;
 
+use Foowie\Cron\ICron;
 use Nette\Application;
 use Nette\Application\UI\Presenter;
 
@@ -11,14 +12,32 @@ use Nette\Application\UI\Presenter;
 class CronPresenter extends Presenter {
 
 	/**
-	 * @var \Foowie\Cron\Application\UI\SecurityToken @inject
+	 * @var SecurityToken
 	 */
-	public $securityToken;
+	protected $securityToken;
 
 	/**
-	 * @var \Foowie\Cron\ICron @inject
+	 * @var ICron
 	 */
-	public $cron;
+	protected $cron;
+
+	/**
+	 * @var null|int
+	 */
+	protected $maxExecutionTime = null;
+
+	function __construct(ICron $cron, SecurityToken $securityToken) {
+		parent::__construct();
+		$this->cron = $cron;
+		$this->securityToken = $securityToken;
+	}
+
+	/**
+	 * @param int|null $maxExecutionTime
+	 */
+	public function setMaxExecutionTime($maxExecutionTime) {
+		$this->maxExecutionTime = $maxExecutionTime;
+	}
 
 	public function checkRequirements($element) {
 		if ($this->securityToken !== null && $element instanceof Application\UI\PresenterComponentReflection) {
@@ -30,6 +49,10 @@ class CronPresenter extends Presenter {
 	}
 
 	public function actionDefault() {
+		if($this->maxExecutionTime !== null) {
+			ini_set('max_execution_time', $this->maxExecutionTime);
+		}
+
 		$this->cron->run();
 		$this->sendResponse(new Application\Responses\TextResponse(''));
 	}
