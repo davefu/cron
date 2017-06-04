@@ -26,6 +26,7 @@ class CronExtension extends CompilerExtension {
 
 		'mapPresenter' => true,
 		'maxExecutionTime' => null,
+		'memoryLimit' => null,
 		'securityToken' => false,
 		'mapping' => array(
 			'FoowieCron' => 'Foowie\\Cron\\Application\\UI\\*\\*Presenter'
@@ -96,7 +97,8 @@ class CronExtension extends CompilerExtension {
 			->addSetup('setMapping', array($config['mapping']));
 		$builder->addDefinition($this->prefix('cronPresenter'))
 			->setClass('Foowie\Cron\Application\UI\CronPresenter')
-			->addSetup('setMaxExecutionTime', [$config['maxExecutionTime']]);
+			->addSetup('setMaxExecutionTime', [$config['maxExecutionTime']])
+			->addSetup('setMemoryLimit', [$config['memoryLimit']]);
 	}
 
 	protected function loadRepository() {

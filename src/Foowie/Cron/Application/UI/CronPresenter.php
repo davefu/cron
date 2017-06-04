@@ -26,6 +26,11 @@ class CronPresenter extends Presenter {
 	 */
 	protected $maxExecutionTime = null;
 
+	/**
+	 * @var null|string
+	 */
+	protected $memoryLimit = null;
+
 	function __construct(ICron $cron, SecurityToken $securityToken) {
 		parent::__construct();
 		$this->cron = $cron;
@@ -37,6 +42,13 @@ class CronPresenter extends Presenter {
 	 */
 	public function setMaxExecutionTime($maxExecutionTime) {
 		$this->maxExecutionTime = $maxExecutionTime;
+	}
+
+	/**
+	 * @param null|string $memoryLimit
+	 */
+	public function setMemoryLimit($memoryLimit) {
+		$this->memoryLimit = $memoryLimit;
 	}
 
 	public function checkRequirements($element) {
@@ -51,6 +63,9 @@ class CronPresenter extends Presenter {
 	public function actionDefault() {
 		if($this->maxExecutionTime !== null) {
 			ini_set('max_execution_time', $this->maxExecutionTime);
+		}
+		if($this->memoryLimit !== null) {
+			ini_set('memory_limit', $this->memoryLimit);
 		}
 
 		$this->cron->run();
