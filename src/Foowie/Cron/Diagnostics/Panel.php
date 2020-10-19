@@ -4,14 +4,15 @@ namespace Foowie\Cron\Diagnostics;
 
 use Foowie\Cron\Cron;
 use Nette\Http\Request;
-use Nette\Object;
+use Nette\SmartObject;
 use Tracy\Debugger;
 use Tracy\IBarPanel;
 
 /**
  * @author Daniel Robenek <daniel.robenek@me.com>
  */
-class Panel extends Object implements IBarPanel {
+class Panel implements IBarPanel {
+	use SmartObject;
 
 	/** @var Cron */
 	protected $cron;

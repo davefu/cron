@@ -4,15 +4,15 @@ namespace Foowie\Cron\Job;
 
 use DateTime;
 use Foowie\Cron\Repository\IRepository;
-use Nette\Object;
+use Nette\SmartObject;
 use Nette\Utils\AssertionException;
 use Nette\Utils\Strings;
-use Nette\Utils\Validators;
 
 /**
  * @author Daniel Robenek <daniel.robenek@me.com>
  */
-class DailyJob extends Object implements IJob {
+class DailyJob implements IJob {
+	use SmartObject;
 
 	/** @var IJob */
 	protected $job;

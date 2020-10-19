@@ -2,12 +2,18 @@
 
 namespace Foowie\Cron;
 
-use Nette\Object;
+use Nette\SmartObject;
 
 /**
  * @author Daniel Robenek <daniel.robenek@me.com>
+ *
+ * @property-read int $id
+ * @property string $name
+ * @property \DateTime|null $lastRun
+ * @property string|null $data
  */
-class JobInfo extends Object {
+class JobInfo {
+	use SmartObject;
 
 	/**
 	 * @var int
@@ -51,14 +57,14 @@ class JobInfo extends Object {
 	}
 
 	/**
-	 * @return \DateTime
+	 * @return \DateTime|null
 	 */
 	public function getLastRun() {
 		return $this->lastRun;
 	}
 
 	/**
-	 * @return string
+	 * @return string|null
 	 */
 	public function getData() {
 		return $this->data;

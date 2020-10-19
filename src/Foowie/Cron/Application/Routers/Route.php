@@ -4,7 +4,6 @@ namespace Foowie\Cron\Application\Routers;
 
 use Nette\Application\IRouter;
 use Nette\Application\Routers\RouteList;
-use Nette\Object;
 
 /**
  * @author Daniel Robenek <daniel.robenek@me.com>
