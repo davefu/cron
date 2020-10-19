@@ -10,7 +10,8 @@
 	}
 	],
 	"require": {
-		"nette/utils": "2.*",
+		"php": ">=5.4 <7.2",
+		"nette/utils": ">=2.0 <2.5",
 		"nette/application": "2.*",
 		"nette/bootstrap": "2.*",
 		"nette/di": "2.*",
@@ -18,9 +19,10 @@
 		"tracy/tracy": "2.*"
 	},
 	"require-dev": {
-		"nette/tester": "@dev",
-		"doctrine/orm": "2.*",
-		"kdyby/doctrine": "2.*"
+		"nette/tester": "~1.0",
+		"doctrine/orm": ">=2.4 <2.7.3",
+		"doctrine/dbal": "~2.5",
+		"kdyby/doctrine": "2.*|~3.0"
 	},
 	"suggest": {
 		"doctrine/orm": "ORM framework",

@@ -3,3 +3,7 @@ services:
 	- FoowieTests\Mocks\EntityManagerInterfaceMock
 cron:
 	securityToken: null
+extensions:
+	console: Kdyby\Console\DI\ConsoleExtension
+application:
+	scanDirs: false

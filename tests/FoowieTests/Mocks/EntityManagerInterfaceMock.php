@@ -129,4 +129,8 @@ class EntityManagerInterfaceMock implements EntityManagerInterface {
 
 	public function contains($object) {
 	}
+
+	public function getCache() {
+
+	}
 }
