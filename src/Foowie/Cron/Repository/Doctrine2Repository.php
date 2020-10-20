@@ -5,12 +5,13 @@ namespace Foowie\Cron\Repository;
 use Doctrine\ORM\EntityManagerInterface;
 use Foowie\Cron\Exceptions\CronException;
 use Foowie\Cron\JobInfo;
-use Nette\Object;
+use Nette\SmartObject;
 
 /**
  * @author Daniel Robenek <daniel.robenek@me.com>
  */
-class Doctrine2Repository extends Object implements IRepository {
+class Doctrine2Repository implements IRepository {
+	use SmartObject;
 
 	/**
 	 * @var EntityManagerInterface

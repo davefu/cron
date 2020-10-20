@@ -5,12 +5,13 @@ namespace Foowie\Cron\Job;
 use DateTime;
 use Foowie\Cron\DateTime\IDateTimeProvider;
 use Foowie\Cron\Repository\IRepository;
-use Nette\Object;
+use Nette\SmartObject;
 
 /**
  * @author Daniel Robenek <daniel.robenek@me.com>
  */
-class MidnightJob extends Object implements IJob {
+class MidnightJob implements IJob {
+	use SmartObject;
 
 	/** @var IJob */
 	protected $job;

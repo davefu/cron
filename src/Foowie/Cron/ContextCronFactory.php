@@ -3,13 +3,14 @@
 namespace Foowie\Cron;
 
 use Foowie\Cron\Job\IJob;
-use Nette\Object;
+use Nette\SmartObject;
 use Nette\DI\Container;
 
 /**
  * @author Daniel Robenek <daniel.robenek@me.com>
  */
-class ContextCronFactory extends Object {
+class ContextCronFactory {
+	use SmartObject;
 
 	/** @var Container */
 	protected $context;

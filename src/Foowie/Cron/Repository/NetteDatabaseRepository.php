@@ -5,13 +5,14 @@ namespace Foowie\Cron\Repository;
 use Foowie\Cron\Exceptions\CronException;
 use Foowie\Cron\JobInfo;
 use Nette\Database\Context;
-use Nette\Object;
+use Nette\SmartObject;
 
 
 /**
  * @author Daniel Robenek <daniel.robenek@me.com>
  */
-class NetteDatabaseRepository extends Object implements IRepository {
+class NetteDatabaseRepository implements IRepository {
+	use SmartObject;
 
 	/** @var Context */
 	protected $database;

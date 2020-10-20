@@ -4,14 +4,15 @@ namespace Foowie\Cron;
 
 use Foowie\Cron\Exceptions\CronException;
 use Foowie\Cron\Job\IJob;
-use Nette\Object;
+use Nette\SmartObject;
 use Exception;
 use Tracy\Debugger;
 
 /**
  * @author Daniel Robenek <daniel.robenek@me.com>
  */
-class Cron extends Object implements ICron {
+class Cron implements ICron {
+	use SmartObject;
 
 	/** @var IJob[] */
 	protected $jobs;

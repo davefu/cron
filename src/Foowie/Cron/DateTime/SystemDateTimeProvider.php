@@ -2,13 +2,14 @@
 
 namespace Foowie\Cron\DateTime;
 
-use Nette\Object;
+use Nette\SmartObject;
 use Nette\Utils\DateTime;
 
 /**
  * @author Daniel Robenek <daniel.robenek@me.com>
  */
-class SystemDateTimeProvider extends Object implements IDateTimeProvider {
+class SystemDateTimeProvider implements IDateTimeProvider {
+	use SmartObject;
 
 	/**
 	 * @param string|\DateTimel $time

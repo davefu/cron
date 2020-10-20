@@ -2,12 +2,13 @@
 
 namespace Foowie\Cron\Application\UI;
 
-use Nette\Object;
+use Nette\SmartObject;
 
 /**
  * @author Daniel Robenek <daniel.robenek@me.com>
  */
-class SecurityToken extends Object {
+class SecurityToken {
+	use SmartObject;
 
 	/**
 	 * @var null|string

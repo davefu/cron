@@ -3,12 +3,13 @@
 namespace Foowie\Cron\Job;
 
 use Foowie\Cron\Exceptions\CronException;
-use Nette\Object;
+use Nette\SmartObject;
 
 /**
  * @author Daniel Robenek <daniel.robenek@me.com>
  */
-class CallbackJob extends Object implements IJob {
+class CallbackJob implements IJob {
+	use SmartObject;
 
 	/** @var callback */
 	protected $callback;

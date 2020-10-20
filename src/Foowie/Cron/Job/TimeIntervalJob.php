@@ -3,13 +3,14 @@
 namespace Foowie\Cron\Job;
 
 use Foowie\Cron\Repository\IRepository;
-use Nette\Object;
+use Nette\SmartObject;
 use DateTime;
 
 /**
  * @author Daniel Robenek <daniel.robenek@me.com>
  */
-class TimeIntervalJob extends Object implements IJob {
+class TimeIntervalJob implements IJob {
+	use SmartObject;
 
 	/** @var IJob */
 	protected $job;
