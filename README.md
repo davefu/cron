@@ -40,4 +40,5 @@ By default, the CronPresenter in FoowieCron module is mapped to url /cron/<token
 To disable security token, set its value to null. To disable CronPresenter, set property mapPresenter in config to false.
 
 There is also support for Doctrine 2. Default behavior is to autodetect used ORM. You can set it manually in config with key repositoryType [ndb, doctrine].
-Entity Foowie\Cron\JobInfo has mapping metadata in src/Foowie/Cron/metadata/Foowie.Cron.JobInfo.dcm.xml. If you're using Kdyby\Doctrine, alternative KdybyDoctrineCronExtension also maps this entity.
+Entity Foowie\Cron\JobInfo has mapping metadata in src/Foowie/Cron/metadata/Foowie.Cron.JobInfo.dcm.xml. If you're using Nettrine\ORM, alternative NettrineDoctrineCronExtension also maps this entity.
+(Please use proxies for Doctrine related extensions (Nettrine packages) from [Davefu/Kdyby-Contributte-Bridge](https://github.com/davefu/Kdyby-Contributte-Bridge) package. The package provides few helper classes to simplify mapping configuration of this extension.)

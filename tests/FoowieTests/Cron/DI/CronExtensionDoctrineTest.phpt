@@ -23,7 +23,7 @@ class CronExtensionDoctrineTest extends BaseExtension {
 	public function testDetectRepositoryTypeDoctrine() {
 		$this->extension->defaults['repositoryType'] = null;
 		$type = $this->extension->detectRepositoryType();
-		Assert::true(interface_exists('Doctrine\ORM\EntityManagerInterface'));
+		Assert::true(class_exists('Nettrine\ORM\DI\OrmExtension'));
 		Assert::same(CronExtension::REPOSITORY_DOCTRINE, $type);
 	}
 

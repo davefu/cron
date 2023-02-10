@@ -9,6 +9,12 @@
 		"name": "Daniel Robenek"
 	}
 	],
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/davefu/KdybyEvents-ContributteDoctrine-Proxy"
+		}
+	],
 	"require": {
 		"php": ">=5.6",
 		"nette/utils": "^2.4",
@@ -22,11 +28,11 @@
 		"nette/tester": "~2.0",
 		"doctrine/orm": ">=2.4 <2.7.3",
 		"doctrine/dbal": "~2.5",
-		"kdyby/doctrine": "~3.2"
+		"davefu/kdyby-contributte-bridge": "@dev"
 	},
 	"suggest": {
 		"doctrine/orm": "ORM framework",
-		"kdyby/doctrine": "Nette extension for Doctrine 2"
+		"davefu/kdyby-contributte-bridge": "Nette extension for Doctrine 2"
 	},
 	"autoload": {
 		"psr-0": {
