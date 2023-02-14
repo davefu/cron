@@ -4,6 +4,7 @@ namespace Foowie\Cron\Diagnostics;
 
 use Foowie\Cron\Cron;
 use Nette\Http\Request;
+use Nette\Http\UrlImmutable;
 use Nette\SmartObject;
 use Tracy\Debugger;
 use Tracy\IBarPanel;
@@ -20,7 +21,7 @@ class Panel implements IBarPanel {
 	/** @var Request */
 	protected $request;
 
-	function __construct(Cron $cron, Request $request) {
+	final public function __construct(Cron $cron, Request $request) {
 		$this->cron = $cron;
 		$this->request = $request;
 
@@ -44,12 +45,12 @@ class Panel implements IBarPanel {
 	 * @return string
 	 */
 	function getPanel() {
-		return null;
+		return '';
 	}
 
 	protected function runCronJobs() {
 		$this->cron->run();
-		header('Location: ' . $this->request->getReferer());
+		header('Location: ' . $this->getReferrer());
 		exit;
 	}
 
@@ -58,5 +59,14 @@ class Panel implements IBarPanel {
 		$panel = new static($cron, $request);
 		$bar->addPanel($panel);
 		return $panel;
+	}
+
+	protected function getReferrer(): ?UrlImmutable {
+		$referrer = $this->request->headers['referer'] ?? null;
+		if (!empty($referrer)) {
+			return new UrlImmutable($referrer);
+		}
+
+		return $this->request->getOrigin();
 	}
 }

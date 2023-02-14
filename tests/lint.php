@@ -56,9 +56,9 @@ HELP;
 	return $options;
 };
 
-$echo = function () use (&$context) {
+$echo = function (...$args) use (&$context) {
 	if ($context['quiet']) return;
-	foreach (func_get_args() as $arg) echo $arg;
+	foreach ($args as $arg) echo $arg;
 };
 
 $lintFile = function ($path) use (&$echo, &$context) {
@@ -80,7 +80,10 @@ $lintFile = function ($path) use (&$echo, &$context) {
 };
 
 $check = function ($path) use (&$check, &$lintFile, &$context) {
-	if (!is_dir($path)) return $lintFile($path);
+	if (!is_dir($path)) {
+		$lintFile($path);
+		return;
+	}
 	foreach (scandir($path) as $item) {
 		if ($item == '.' || $item == '..') continue;
 		$check(rtrim($path, '/') . '/' . $item);

@@ -4,7 +4,7 @@ namespace Foowie\Cron\Repository;
 
 use Foowie\Cron\Exceptions\CronException;
 use Foowie\Cron\JobInfo;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\SmartObject;
 
 
@@ -14,13 +14,13 @@ use Nette\SmartObject;
 class NetteDatabaseRepository implements IRepository {
 	use SmartObject;
 
-	/** @var Context */
+	/** @var Explorer */
 	protected $database;
 
 	/** @var string */
 	protected $tableName;
 
-	function __construct(Context $database, $tableName = 'cron') {
+	function __construct(Explorer $database, $tableName = 'cron') {
 		$this->database = $database;
 		$this->tableName = $tableName;
 	}
@@ -32,7 +32,7 @@ class NetteDatabaseRepository implements IRepository {
 	 */
 	public function find($name) {
 		$record = $this->database->table($this->tableName)->where('name', $name)->fetch();
-		if ($record === false) {
+		if ($record === null) {
 			$record = $this->database->table($this->tableName)->insert(array('name' => $name));
 			if ($record === false) {
 				throw new CronException("Can't insert row into database!");

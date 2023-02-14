@@ -5,8 +5,12 @@ namespace Foowie\Cron\DI;
 use Nette\Configurator;
 use Nette\DI\Compiler;
 use Nette\DI\CompilerExtension;
+use Nette\DI\Helpers as CompilerHelpers;
+use Nette\DI\Definitions\ServiceDefinition;
 use Nette\DI\Definitions\Statement;
+use Nette\DI\Resolver;
 use Nette\PhpGenerator\ClassType;
+use Nette\PhpGenerator\Dumper;
 use Nette\PhpGenerator\Helpers;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
@@ -80,7 +84,7 @@ class CronExtension extends CompilerExtension {
 		$config = $this->config;
 		if ($config->panel && $container->parameters['debugMode']) {
 			$init = $class->methods['initialize'];
-			$init->addBody(Helpers::format(
+			$init->addBody((new Dumper())->format(
 				'Foowie\Cron\Diagnostics\Panel::register($this->getByType(?), $this->getByType(?));',
 				'Foowie\Cron\ICron',
 				'Nette\Http\Request'
@@ -100,10 +104,15 @@ class CronExtension extends CompilerExtension {
 		$builder->addDefinition($this->prefix('router'))
 			->setFactory('Foowie\Cron\Application\Routers\Route', [$config->router->pattern, $config->router->metadata])
 			->setAutowired(false);
-		$builder->getDefinition('router')
-			->addSetup('Foowie\Cron\Application\Routers\Route::prependToRouteList($service, ?)', [$this->prefix('@router')]);
-		$builder->getDefinition('nette.presenterFactory')
-			->addSetup('setMapping', [$config->mapping]);
+
+		/** @var ServiceDefinition $netteRouter */
+		$netteRouter = $builder->getDefinition('router');
+		$netteRouter->addSetup('Foowie\Cron\Application\Routers\Route::prependToRouteList($service, ?)', [$this->prefix('@router')]);
+
+		/** @var ServiceDefinition $nettePresenterFactory */
+		$nettePresenterFactory = $builder->getDefinition('nette.presenterFactory');
+		$nettePresenterFactory->addSetup('setMapping', [$config->mapping]);
+
 		$builder->addDefinition($this->prefix('cronPresenter'))
 			->setType('Foowie\Cron\Application\UI\CronPresenter')
 			->addSetup('setMaxExecutionTime', [$config->maxExecutionTime])
@@ -122,7 +131,7 @@ class CronExtension extends CompilerExtension {
 				break;
 			case static::REPOSITORY_NDB:
 				$builder->addDefinition($this->prefix('repository'))
-					->setFactory('Foowie\Cron\Repository\NetteDatabaseRepository', ["@\Nette\Database\Context", $config->table]);
+					->setFactory('Foowie\Cron\Repository\NetteDatabaseRepository', ["@\Nette\Database\Explorer", $config->table]);
 				break;
 			case false:
 				break;
@@ -135,15 +144,16 @@ class CronExtension extends CompilerExtension {
 		$builder = $this->getContainerBuilder();
 		$config = $this->config;
 
+		$resolver = new Resolver($builder);
 		foreach ($config->jobs as $subscriber) {
 			$def = $builder->addDefinition($this->prefix('job.' . md5(Json::encode($subscriber))));
-			list($def->factory) = Compiler::filterArguments([
+			list($def->factory) = CompilerHelpers::filterArguments([
 				is_string($subscriber) ? new Statement($subscriber) : $subscriber
 			]);
 
-			list($subscriberClass) = (array)$builder->normalizeEntity($def->factory->entity);
+			$subscriberClass = $resolver->resolveEntityType($def->factory);
 			if (class_exists($subscriberClass)) {
-				$def->class = $subscriberClass;
+				$def->setType($subscriberClass);
 			}
 
 			$def->setAutowired(false);

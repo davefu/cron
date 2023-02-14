@@ -30,7 +30,10 @@
 	},
 	"suggest": {
 		"doctrine/orm": "ORM framework",
-		"davefu/kdyby-contributte-bridge": "Nette extension for Doctrine 2"
+		"davefu/kdyby-contributte-bridge": "Nette extension for Doctrine 2",
+		"phpstan/phpstan": "^1.9",
+		"phpstan/phpstan-nette": "^1.2.3",
+		"phpstan/phpstan-deprecation-rules": "^1.1.1"
 	},
 	"autoload": {
 		"psr-0": {

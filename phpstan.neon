@@ -1,0 +1,18 @@
+includes:
+	- vendor/phpstan/phpstan-deprecation-rules/rules.neon
+	- vendor/phpstan/phpstan-nette/extension.neon
+	- vendor/phpstan/phpstan-nette/rules.neon
+
+parameters:
+	level: 5
+	paths:
+		- src
+		- tests
+	excludePaths:
+		analyse:
+			- tests/lint.php
+			- tests/FoowieTests/Mocks
+		analyseAndScan:
+			- tests/tmp
+	ignoreErrors:
+		- "#^Parameter \\#2 \\$newvalue of function ini_set expects string, int given\\.$#"

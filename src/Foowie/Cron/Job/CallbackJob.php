@@ -11,7 +11,7 @@ use Nette\SmartObject;
 class CallbackJob implements IJob {
 	use SmartObject;
 
-	/** @var callback */
+	/** @var callable */
 	protected $callback;
 
 	function __construct($callback) {

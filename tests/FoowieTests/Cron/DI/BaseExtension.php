@@ -3,15 +3,9 @@
 namespace FoowieTests\Cron\DI;
 
 use Foowie\Cron\DI\CronExtension;
-use Foowie\Cron\Job\MidnightJob;
-use Foowie\Cron\JobInfo;
-use FoowieTests\Mocks\JobMock;
-use FoowieTests\Mocks\RepositoryMock;
 use Nette\Configurator;
 use Nette\DI\Compiler;
-use Nette\Utils\AssertionException;
-use Nette\Utils\FileSystem;
-use Tester\Assert;
+use Nette\DI\Container;
 use Tester\TestCase;
 
 
@@ -29,10 +23,7 @@ abstract class BaseExtension extends TestCase {
 		$this->extension = new CronExtension();
 	}
 
-	/**
-	 * @return \SystemContainer|\Nette\DI\Container
-	 */
-	protected function createContainer() {
+	protected function createContainer(): Container {
 		$config = new Configurator();
 		$config->setTempDirectory(TEMP_DIR);
 		$cronExtension = $this->extension;

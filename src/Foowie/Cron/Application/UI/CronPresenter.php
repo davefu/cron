@@ -51,7 +51,7 @@ class CronPresenter extends Presenter {
 		$this->memoryLimit = $memoryLimit;
 	}
 
-	public function checkRequirements($element) {
+	public function checkRequirements($element): void {
 		if ($this->securityToken !== null && $element instanceof Application\UI\PresenterComponentReflection) {
 			if ($this->getParameter('token') != $this->securityToken->getSecurityToken()) {
 				throw new Application\ForbiddenRequestException('Security token does not match!');

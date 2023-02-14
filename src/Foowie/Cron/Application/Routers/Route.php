@@ -2,7 +2,7 @@
 
 namespace Foowie\Cron\Application\Routers;
 
-use Nette\Application\IRouter;
+use Nette\Routing\Router;
 use Nette\Application\Routers\RouteList;
 
 /**
@@ -10,7 +10,7 @@ use Nette\Application\Routers\RouteList;
  */
 class Route extends \Nette\Application\Routers\Route {
 
-	public static function prependToRouteList(RouteList $routeList, IRouter $router) {
+	public static function prependToRouteList(RouteList $routeList, Router $router) {
 		$count = count($routeList);
 		foreach($routeList as $routeId => $route) {
 			if($routeId == $count - 2) {

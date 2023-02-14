@@ -12,7 +12,7 @@ class SystemDateTimeProvider implements IDateTimeProvider {
 	use SmartObject;
 
 	/**
-	 * @param string|\DateTimel $time
+	 * @param string|\DateTime $time
 	 * @return \DateTime
 	 */
 	function getTime($time = 'now') {
