@@ -38,15 +38,13 @@ class CronExtension extends CompilerExtension {
 			'maxExecutionTime' => Expect::int()->nullable(),
 			'memoryLimit' => Expect::string()->nullable(),
 			'securityToken' => Expect::anyOf(Expect::string()->nullable(), Expect::bool(false)),
-			'mapping' => Expect::array([
-					'FoowieCron' => 'Foowie\\Cron\\Application\\UI\\*\\*Presenter'
-				]
-			),
-			'router' => Expect::array([
-					'pattern' => 'cron[/<token>]',
-					'metadata' => 'FoowieCron:Cron:default',
-				]
-			),
+			'mapping' => Expect::structure([
+				'FoowieCron' => Expect::string('Foowie\\Cron\\Application\\UI\\*\\*Presenter'),
+			]),
+			'router' => Expect::structure([
+				'pattern' => Expect::string('cron[/<token>]'),
+				'metadata' => Expect::string('FoowieCron:Cron:default'),
+			]),
 			'jobs' => Expect::array(),
 			'panel' => Expect::bool(true),
 		]);
@@ -96,7 +94,7 @@ class CronExtension extends CompilerExtension {
 		$builder = $this->getContainerBuilder();
 		$config = $this->config;
 
-		if ($config['securityToken'] === false) {
+		if ($config->securityToken === false) {
 			throw new AssertionException('Specify security token [' . $this->name . '.securityToken] please.');
 		}
 		$builder->addDefinition($this->prefix('securityToken'))
