@@ -38,8 +38,8 @@ class CronExtension extends CompilerExtension {
 			'maxExecutionTime' => Expect::int()->nullable(),
 			'memoryLimit' => Expect::string()->nullable(),
 			'securityToken' => Expect::anyOf(Expect::string()->nullable(), Expect::bool(false)),
-			'mapping' => Expect::structure([
-				'FoowieCron' => Expect::string('Foowie\\Cron\\Application\\UI\\*\\*Presenter'),
+			'mapping' => Expect::arrayOf(Expect::string(), Expect::string())->default([
+				'FoowieCron' => 'Foowie\\Cron\\Application\\UI\\*\\*Presenter',
 			]),
 			'router' => Expect::structure([
 				'pattern' => Expect::string('cron[/<token>]'),
@@ -67,14 +67,16 @@ class CronExtension extends CompilerExtension {
 		$builder->addDefinition($this->prefix('dateTimeProvider'))
 			->setType('Foowie\Cron\DateTime\SystemDateTimeProvider');
 
-		if ($config->mapPresenter) {
-			$this->loadMapping();
-		}
-
 		$this->loadRepository();
 
 		$this->loadJobs();
 
+	}
+
+	public function beforeCompile(): void {
+		if ($this->config->mapPresenter) {
+			$this->loadMapping();
+		}
 	}
 
 	public function afterCompile(ClassType $class) {

@@ -10,16 +10,8 @@ use Nette\Application\Routers\RouteList;
  */
 class Route extends \Nette\Application\Routers\Route {
 
-	public static function prependToRouteList(RouteList $routeList, Router $router) {
-		$count = count($routeList);
-		foreach($routeList as $routeId => $route) {
-			if($routeId == $count - 2) {
-				$routeList[] = $route;
-				break;
-			}
-			$routeList[$routeId + 1] = $route;
-		}
-		$routeList[0] = $router;
+	public static function prependToRouteList(RouteList $routeList, Router $router, int $flags = 0) {
+		$routeList->prepend($router, $flags);
 	}
 
 } 
