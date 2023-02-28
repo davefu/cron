@@ -11,7 +11,6 @@ use Nette\DI\Definitions\Statement;
 use Nette\DI\Resolver;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Dumper;
-use Nette\PhpGenerator\Helpers;
 use Nette\Schema\Expect;
 use Nette\Schema\Schema;
 use Nette\Utils\AssertionException;
@@ -67,6 +66,8 @@ class CronExtension extends CompilerExtension {
 		$builder->addDefinition($this->prefix('dateTimeProvider'))
 			->setType('Foowie\Cron\DateTime\SystemDateTimeProvider');
 
+		$this->addMappingDefinitions();
+
 		$this->loadRepository();
 
 		$this->loadJobs();
@@ -74,9 +75,7 @@ class CronExtension extends CompilerExtension {
 	}
 
 	public function beforeCompile(): void {
-		if ($this->config->mapPresenter) {
-			$this->loadMapping();
-		}
+		$this->registerMapping();
 	}
 
 	public function afterCompile(ClassType $class) {
@@ -92,18 +91,36 @@ class CronExtension extends CompilerExtension {
 		}
 	}
 
-	protected function loadMapping() {
-		$builder = $this->getContainerBuilder();
+	protected function addMappingDefinitions() {
 		$config = $this->config;
+		if (!$config->mapPresenter) {
+			return;
+		}
 
 		if ($config->securityToken === false) {
 			throw new AssertionException('Specify security token [' . $this->name . '.securityToken] please.');
 		}
+
+		$builder = $this->getContainerBuilder();
 		$builder->addDefinition($this->prefix('securityToken'))
 			->setFactory('Foowie\Cron\Application\UI\SecurityToken', [$config->securityToken]);
 		$builder->addDefinition($this->prefix('router'))
 			->setFactory('Foowie\Cron\Application\Routers\Route', [$config->router->pattern, $config->router->metadata])
 			->setAutowired(false);
+
+		$builder->addDefinition($this->prefix('cronPresenter'))
+			->setType('Foowie\Cron\Application\UI\CronPresenter')
+			->addSetup('setMaxExecutionTime', [$config->maxExecutionTime])
+			->addSetup('setMemoryLimit', [$config->memoryLimit]);
+	}
+
+	protected function registerMapping() {
+		$config = $this->config;
+		if (!$config->mapPresenter) {
+			return;
+		}
+
+		$builder = $this->getContainerBuilder();
 
 		/** @var ServiceDefinition $netteRouter */
 		$netteRouter = $builder->getDefinition('router');
@@ -112,11 +129,6 @@ class CronExtension extends CompilerExtension {
 		/** @var ServiceDefinition $nettePresenterFactory */
 		$nettePresenterFactory = $builder->getDefinition('nette.presenterFactory');
 		$nettePresenterFactory->addSetup('setMapping', [$config->mapping]);
-
-		$builder->addDefinition($this->prefix('cronPresenter'))
-			->setType('Foowie\Cron\Application\UI\CronPresenter')
-			->addSetup('setMaxExecutionTime', [$config->maxExecutionTime])
-			->addSetup('setMemoryLimit', [$config->memoryLimit]);
 	}
 
 	protected function loadRepository() {
