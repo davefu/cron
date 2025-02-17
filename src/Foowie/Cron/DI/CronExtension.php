@@ -81,8 +81,8 @@ class CronExtension extends CompilerExtension {
 	public function afterCompile(ClassType $class) {
 		$container = $this->getContainerBuilder();
 		$config = $this->config;
+		$init = $class->getMethod('initialize');
 		if ($config->panel && $container->parameters['debugMode']) {
-			$init = $class->methods['initialize'];
 			$init->addBody((new Dumper())->format(
 				'Foowie\Cron\Diagnostics\Panel::register($this->getByType(?), $this->getByType(?));',
 				'Foowie\Cron\ICron',
